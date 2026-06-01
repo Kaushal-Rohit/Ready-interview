@@ -61,7 +61,7 @@ When an interview run concludes or passes below safety thresholds, the evaluatio
 ## 🎥 Live Demonstration Walkthrough
 Click the link below to watch the mandatory live application demonstration, showcasing the full voice interaction pipeline, code execution parsing, and state adjustments:
 
-📺 **[Watch the Ready?.com System Demonstration Video](YOUR_PASTED_VIDEO_LINK_HERE)**
+📺 **[Watch the Ready?.com System Demonstration Video](https://drive.google.com/file/d/1oxYexnEEYHxaMjFgTfT2WYxuYhSr_n6E/view?usp=sharing)**
 
 ---
 
