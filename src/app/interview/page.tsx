@@ -260,6 +260,7 @@ export default function InterviewPage() {
         }
 
         setCodeContent("");
+        setUserTranscript("");
         if (evalData.data.nextQuestion) {
           const nextQ = evalData.data.nextQuestion.question;
           setCurrentQuestion(nextQ);
@@ -332,6 +333,7 @@ export default function InterviewPage() {
         const termination = shouldTerminate(newState);
         if (termination.terminate) { endInterview(newState, termination.reason || "Interview completed."); return; }
         setCodeContent("");
+        setUserTranscript("");
         if (evalData.data.nextQuestion) {
           const nextQ = evalData.data.nextQuestion.question;
           setCurrentQuestion(nextQ);

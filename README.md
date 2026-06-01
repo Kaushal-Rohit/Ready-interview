@@ -1,151 +1,87 @@
 # Ready?.com — AI-Powered Mock Interview Platform
 
-> An AI-driven mock interview simulator that adapts in real-time to candidate performance, providing objective scoring, adaptive difficulty, and actionable feedback.
-
-## 🎯 Problem Statement
-
-Most candidates fail interviews not due to lack of skill, but due to lack of **structured interview preparedness**. This platform solves that by simulating a real-world interview with an AI interviewer that thinks, adapts, evaluates, and decides — just like a human interviewer would.
-
-## ✨ Key Features
-
-### Core Interview Engine
-- **Resume Parsing** — Upload PDF/TXT resume, AI extracts skills, experience, projects, and education
-- **Job Description Alignment** — Questions are tailored to both the candidate's resume and the target role
-- **4 Question Types** — Technical, Conceptual, Behavioral, and Scenario-based questions
-- **Adaptive Difficulty** — Dynamically adjusts (Easy → Medium → Hard) based on recent performance
-- **Voice-Powered** — Speak your answers naturally via browser microphone + Deepgram STT
-- **Code Editor** — Embedded IDE workspace slides in for Technical/Scenario questions
-
-### Scoring & Evaluation
-- **5-Metric Scoring** — Each answer scored 1-10 on: Accuracy, Clarity, Depth, Relevance, Time Efficiency
-- **90-Second Timer** — Fixed response time with automatic time penalties
-- **Early Termination** — Interview ends if 3+ consecutive poor scores on Easy difficulty
-- **4-Strike Rule** — 4 consecutive timeouts = automatic termination
-- **Final Readiness Score** — Overall 0-100 score with badge (Strong / Average / Needs Improvement)
-
-### Dashboard & Analytics
-- **Performance Radar Chart** — Visual breakdown of all 5 scoring metrics
-- **Skill Breakdown Bar Chart** — Per-skill scoring based on resume skills
-- **Strengths & Weaknesses** — AI-generated actionable feedback
-- **Session History** — Full history of past interview sessions with scores
-
-### Infrastructure
-- **Persistent Local DB** — File-based JSON database (`local-database.json`) for users, resumes, and feedback
-- **Gmail-Only Auth** — Simplified authentication for hackathon MVP
-- **Greeting Phase** — AI introduces itself and asks for candidate introduction before real questions
-
-## 🏗️ Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 16 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS 4 |
-| Animations | Framer Motion |
-| Charts | Recharts |
-| AI/LLM | Groq (Llama 3.3 70B Versatile) |
-| Speech-to-Text | Deepgram Nova-2 (REST API) |
-| Text-to-Speech | Web Speech API |
-| Database | Local JSON file (Node.js `fs`) |
-
-## 📁 Project Structure
-
-```
-/src
-├── /app
-│   ├── layout.tsx              # Global layout with metadata
-│   ├── page.tsx                # Landing redirect
-│   ├── /auth/page.tsx          # Gmail-only login/register
-│   ├── /dashboard/page.tsx     # Resume upload, JD input, analytics
-│   ├── /interview/page.tsx     # Live interview room
-│   └── /api
-│       ├── /auth/login          # User authentication
-│       ├── /auth/register       # User registration
-│       ├── /resume              # Resume parsing via Groq
-│       ├── /groq                # Question generation + evaluation + summary
-│       └── /deepgram            # Speech-to-text transcription
-├── /components
-│   ├── InterviewVisualizer.tsx  # AI sphere with speaking/listening animations
-│   ├── PerformanceChart.tsx     # Radar + bar charts
-│   ├── HistoryCard.tsx          # Session history cards
-│   ├── JobDescriptionModal.tsx  # JD input modal
-│   └── /ui                     # Button, Input, Card primitives
-├── /hooks
-│   ├── useAudioRecorder.ts     # MediaRecorder hook
-│   └── useSpeechSynthesis.ts   # Web Speech API hook
-└── /utils
-    ├── stateEngine.ts          # Interview state machine + scoring + termination
-    ├── groqClient.ts           # Groq SDK wrapper
-    ├── localDb.ts              # Persistent file-based JSON database
-    └── db.ts                   # Type definitions
-```
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js 18+
-- Groq API Key
-- Deepgram API Key
-
-### Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/Kaushal-Rohit/Ready-interview.git
-cd Ready-interview
-
-# Install dependencies
-npm install
-
-# Create environment file
-cp .env.example .env.local
-```
-
-Add your API keys to `.env.local`:
-```env
-GROQ_API_KEY=your_groq_api_key
-DEEPGRAM_API_KEY=your_deepgram_api_key
-```
-
-```bash
-# Start development server
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## 🎬 Demo
-
-> **[Screen Recording Video]** — *(Link to video in repository)*
-
-## 📊 Scoring Algorithm
-
-| Metric | Weight | Description |
-|---|---|---|
-| Accuracy | 20% | Factual correctness of the answer |
-| Clarity | 20% | Structure and communication quality |
-| Depth | 20% | Thoroughness and detail level |
-| Relevance | 20% | How well it addresses the question |
-| Time Efficiency | 20% | Response time management |
-
-### Time Penalties
-- **72-90 seconds**: -1 to Time Efficiency score
-- **90+ seconds**: -3 to Time Efficiency score
-
-### Difficulty Adaptation
-- Recent avg ≥ 7/10 → **Hard**
-- Recent avg ≥ 5/10 → **Medium**  
-- Recent avg < 5/10 → **Easy**
-
-### Termination Rules
-- 3 consecutive poor scores (avg < 4) on Easy → Early termination
-- 4 consecutive timeouts → Automatic termination
-- 8 questions completed → Normal completion
-
-## 👤 Author
-
-**Kaushal Rohit**
+Ready?.com is an advanced, ultra-low-latency mock interview evaluation engine engineered for the **Hack2Hire: AI-Powered Interview Hackathon**. The platform bridges structural LLM contextual routing with real-time speech processing pipelines to accurately simulate an adaptive, high-pressure professional hiring evaluation.
 
 ---
 
-*Built for Hack2Hire: AI-Powered Interview Hackathon by UnsaidTalks*
+## 🚀 Core Engine Architecture
+
+* **The Cognitive Layer (LLM Router):** Managed by the **Groq API (`llama3-70b-8192`)** for sub-second, stateful reasoning. Dynamically sequences interactions across Technical, Conceptual, Behavioral, and Scenario-based quadrants.
+* **The Acoustic Pipeline (STT):** Powered by the **Deepgram API SDK** for real-time voice streaming and instantaneous vocal transcription.
+* **The Vocalization Engine (TTS):** Handled entirely via the client-side browser native **Web Speech API (`window.speechSynthesis`)** to completely avoid API payload overhead and keep animations synchronized.
+* **Persistent File Vault (Local DB):** A zero-volatile infrastructure layer built with Node.js native `fs.promises` storing schemas directly into `local-database.json`. Candidate profiles, parsing text metadata, and deep analytical arrays persist seamlessly across development server reloads.
+
+---
+
+## 🖼️ Application Lifecycle & System Walkthrough
+
+### 1. Secure Credential Gateway
+A crisp, minimal entry layer enforcing strict format parsing. The application validates registration vectors to ensure only valid `@gmail.com` profiles can establish persistent account environments.
+![Login Security Interface](./images/Screenshot%20(41).png)
+*Figure 1: Split-screen credential gateway and security verification panel.*
+
+![Account Profile Construction](./images/Screenshot%20(42).png)
+*Figure 2: Form validator ensuring strong authentication metrics during registration.*
+
+---
+
+### 2. Comprehensive Candidate Command Center
+Upon entering the portal, the parsed skill array from the ingested resume is rendered dynamically. Candidates can manage their settings, access their timeline logs, or trigger a target Job Description alignment sweep.
+![Resume Extraction Ingestion](./images/Screenshot%20(43).png)
+*Figure 3: Drag-and-drop ingestion interface parsing PDF/TXT technical metadata.*
+
+![Unified Candidate Dashboard](./images/Screenshot%20(44).png)
+*Figure 4: The unified landing cockpit presenting profile matrices and target session entry points.*
+
+---
+
+### 3. Live Interview Room & Responsive AI Visualizer
+The assessment environment features a custom **Pulsing AI Sphere** built with Framer Motion that scales its radius and morphs shadows in perfect alignment with active audio output frequencies.
+![Technical Code Execution Turn](./images/Screenshot%20(46).png)
+*Figure 5: Live evaluation view showcasing an active workspace for technical problem-solving.*
+
+![Algorithmic Data Manipulation Challenge](./images/Screenshot%20(47).png)
+*Figure 6: Dynamic scenario turn forcing code implementation alongside voice transcription analysis.*
+
+---
+
+### 4. Deep Metrics & Analytical Summary Dashboard
+When an interview run concludes or passes below safety thresholds, the evaluation suite tabulates scores across key structural metrics and populates clear data visualizations.
+![Quick Stats Overview](./images/Screenshot%202026-06-01%20165812.png)
+*Figure 7: Summary widget mapping aggregate readiness scores and session volume metrics.*
+
+![Advanced Performance Analytics Hub](./images/Screenshot%202026-06-01%20165819.png)
+*Figure 8: High-fidelity performance dashboard rendering multi-attribute radar charts, skill-wise bar graphs, and qualitative lists for target optimizations.*
+
+![Chronological Interview History Logs](./images/Screenshot%202026-06-01%20165832.png)
+*Figure 9: In-depth session timeline module cataloging persistent historical records, errors, and metadata details.*
+
+---
+
+## 🎥 Live Demonstration Walkthrough
+Click the link below to watch the mandatory live application demonstration, showcasing the full voice interaction pipeline, code execution parsing, and state adjustments:
+
+📺 **[Watch the Ready?.com System Demonstration Video](YOUR_PASTED_VIDEO_LINK_HERE)**
+
+---
+
+## 🛠️ Local Installation & Development Set
+1. Clone the project workspace:
+   ```bash
+   git clone https://github.com/Kaushal-Rohit/Ready-interview.git
+   cd ready-dot-com
+   ```
+2. Ingest structural dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Establish your environment variables (`.env.local`):
+   ```text
+   GROQ_API_KEY=your_secure_groq_token
+   DEEPGRAM_API_KEY=your_secure_deepgram_token
+   ```
+4. Initiate the local runtime engine:
+   ```bash
+   npm run dev
+   ```
